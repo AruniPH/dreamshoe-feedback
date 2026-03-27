@@ -815,6 +815,19 @@ elif selected == "Owner Dashboard":
             except:
                 pass
             
+            # Ensure idea_votes table exists before joining
+            cur.execute("""
+                CREATE TABLE IF NOT EXISTS idea_votes (
+                    id SERIAL PRIMARY KEY,
+                    idea_id INTEGER,
+                    customer_email VARCHAR(100),
+                    vote_type VARCHAR(10),
+                    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                    UNIQUE(idea_id, customer_email)
+                )
+            """)
+            conn.commit()
+
             # Get all ideas with vote counts from idea_votes table
             cur.execute("""
                 SELECT c.customer_name, ii.customer_email, ii.idea_text,

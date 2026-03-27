@@ -114,6 +114,18 @@ def init_database():
             )
         """)
         
+        # Create idea_votes table
+        cur.execute("""
+            CREATE TABLE IF NOT EXISTS idea_votes (
+                id SERIAL PRIMARY KEY,
+                idea_id INTEGER,
+                customer_email VARCHAR(100),
+                vote_type VARCHAR(10),
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                UNIQUE(idea_id, customer_email)
+            )
+        """)
+
         # Create management_decisions table
         cur.execute("""
             CREATE TABLE IF NOT EXISTS management_decisions (
