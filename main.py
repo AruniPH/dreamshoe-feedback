@@ -1156,45 +1156,52 @@ elif selected == "Statistical Analysis-Crowd ideas":
             
             # Perform one-way ANOVA
             f_stat, p_value = stats.f_oneway(comfort_fit, durability_quality, design_style)
-            
-            col1, col2 = st.columns([2, 1])
-            
-            with col1:
-                st.write("### ANOVA Results")
-                anova_results = pd.DataFrame({
-                    'Statistic': ['F-statistic', 'p-value'],
-                    'Value': [f"{f_stat:.6f}", f"{p_value:.6f}"]
-                })
-                st.dataframe(anova_results)
-                st.markdown("* If p < 0.05: Reject the null hypothesis (H₀).")
-                st.markdown("* If p ≥ 0.05: Fail to reject the null hypothesis (H₀).")
-                
-                # If significant, perform Tukey HSD post-hoc test
-                if p_value < 0.05:
-                    st.write("### Tukey HSD Post-hoc Test")
-                    tukey = pairwise_tukeyhsd(endog=feedback_df['urgency_score'], groups=feedback_df['feature'], alpha=0.05)
-                    tukey_df = pd.DataFrame(data=tukey.summary().data[1:], columns=tukey.summary().data[0])
-                    st.dataframe(tukey_df)
-                    st.markdown("* p-adj < 0.05 → Statistically significant difference.")
-                    st.markdown("* p-adj ≥ 0.05 → No statistically significant difference.")
-                    
-                    # Feature comparison interpretation
-                    st.subheader("Analysis Interpretation")
-                    mean_improvement = feedback_df.groupby('feature')['urgency_score'].mean().sort_values(ascending=False)
-                    highest_feature = mean_improvement.index[0]
-                    lowest_feature = mean_improvement.index[-1]
-                    st.warning(f"**{highest_feature}** needs the most attention (highest improvement rate: {mean_improvement.iloc[0]:.3f})")
-                    st.success(f"**{lowest_feature}** is performing best (lowest improvement rate: {mean_improvement.iloc[-1]:.3f})")
-                else:
-                    st.info("No significant differences found between features. Post-hoc test not needed.")
-                    st.info("All features are performing equally well - no significant differences detected.")
-            
-            with col2:
-                if p_value < 0.05:
-                    st.write("### Confidence Interval Plot")
-                    tukey = pairwise_tukeyhsd(endog=feedback_df['urgency_score'], groups=feedback_df['feature'], alpha=0.05)
-                    fig = tukey.plot_simultaneous()
-                    st.pyplot(fig)
+
+            # NaN occurs when a group has zero variance (all values identical)
+            if np.isnan(f_stat) or np.isnan(p_value):
+                st.warning(
+                    "ANOVA could not be computed because one or more feature groups have no variance "
+                    "(all feedback has the same urgency score). Collect more diverse feedback to enable statistical comparison."
+                )
+            else:
+                col1, col2 = st.columns([2, 1])
+
+                with col1:
+                    st.write("### ANOVA Results")
+                    anova_results = pd.DataFrame({
+                        'Statistic': ['F-statistic', 'p-value'],
+                        'Value': [f"{f_stat:.6f}", f"{p_value:.6f}"]
+                    })
+                    st.dataframe(anova_results)
+                    st.markdown("* If p < 0.05: Reject the null hypothesis (H₀).")
+                    st.markdown("* If p ≥ 0.05: Fail to reject the null hypothesis (H₀).")
+
+                    # If significant, perform Tukey HSD post-hoc test
+                    if p_value < 0.05:
+                        st.write("### Tukey HSD Post-hoc Test")
+                        tukey = pairwise_tukeyhsd(endog=feedback_df['urgency_score'], groups=feedback_df['feature'], alpha=0.05)
+                        tukey_df = pd.DataFrame(data=tukey.summary().data[1:], columns=tukey.summary().data[0])
+                        st.dataframe(tukey_df)
+                        st.markdown("* p-adj < 0.05 → Statistically significant difference.")
+                        st.markdown("* p-adj ≥ 0.05 → No statistically significant difference.")
+
+                        # Feature comparison interpretation
+                        st.subheader("Analysis Interpretation")
+                        mean_improvement = feedback_df.groupby('feature')['urgency_score'].mean().sort_values(ascending=False)
+                        highest_feature = mean_improvement.index[0]
+                        lowest_feature = mean_improvement.index[-1]
+                        st.warning(f"**{highest_feature}** needs the most attention (highest improvement rate: {mean_improvement.iloc[0]:.3f})")
+                        st.success(f"**{lowest_feature}** is performing best (lowest improvement rate: {mean_improvement.iloc[-1]:.3f})")
+                    else:
+                        st.info("No significant differences found between features. Post-hoc test not needed.")
+                        st.info("All features are performing equally well - no significant differences detected.")
+
+                with col2:
+                    if p_value < 0.05:
+                        st.write("### Confidence Interval Plot")
+                        tukey = pairwise_tukeyhsd(endog=feedback_df['urgency_score'], groups=feedback_df['feature'], alpha=0.05)
+                        fig = tukey.plot_simultaneous()
+                        st.pyplot(fig)
             
             # Feature comparison summary
             st.write("### Mean 'Need Improvement' Rate per Feature")
