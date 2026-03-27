@@ -41,6 +41,7 @@ def get_db_connection():
         conn.close()
 
 def init_database():
+    import hashlib
     with get_db_connection() as conn:
         cur = conn.cursor()
         
@@ -52,6 +53,15 @@ def init_database():
                 role VARCHAR(20) NOT NULL CHECK (role IN ('customer', 'owner'))
             )
         """)
+
+        # Seed default owner account if not exists
+        default_owner     = "owner1"
+        default_password  = hashlib.sha256("owner123".encode()).hexdigest()
+        cur.execute("""
+            INSERT INTO users (username, password_hash, role)
+            VALUES (%s, %s, 'owner')
+            ON CONFLICT (username) DO NOTHING
+        """, (default_owner, default_password))
         
         # Create customers table
         cur.execute("""
