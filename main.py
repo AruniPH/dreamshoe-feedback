@@ -127,7 +127,7 @@ if selected == "Customer Hub":
     # AI Chatbot Feedback Collector Section
     st.markdown("---")
     st.subheader("AI Chatbot Feedback Collector")
-    st.markdown("Your insight on the footwear items you have used is important to us to build your dream footwear...")
+    st.markdown("***Share your experience with the footwear you've used to help us improve future designs. Select the feature that matters most to you and chat with our AI assistant to contribute your ideas.***")
 
     product = "Product"
     
@@ -463,7 +463,7 @@ if selected == "Feedback Collector":
         st.markdown("<h1 style='margin: 0; padding: 0; color:#1f77b4;'>DreamShoe</h1>", unsafe_allow_html=True)
 
     st.subheader("Crowd Idea Collector - AI Chatbot based Feedback")
-    st.markdown("Your insight on the footwear items you have used is important to us to build your dream footwear...")
+    st.markdown("***Share your experience with the footwear you've used to help us improve future designs. Select the feature that matters most to you and chat with our AI assistant to contribute your ideas.***")
 
     product = "Product"
     if "last_product" not in st.session_state or st.session_state.last_product != product:
