@@ -122,7 +122,7 @@ if selected == "Customer Hub":
     with col2:
         st.markdown("<h1 style='margin: 0; padding: 0; color:#1f77b4;'>Think & Win - CrowdChoice Reward</h1>", unsafe_allow_html=True)
         st.markdown("<h3 style='margin: 0; padding: 0; color:#8B4513;'>DreamShoe</h3>", unsafe_allow_html=True)
-        st.markdown("<p style='margin-top: 10px; color:#2E8B57; font-size: 18px; font-weight: bold;'>Share your innovative ideas and feedback, and stand a chance to win a Rs. 15,000 gift voucher each month...</p>", unsafe_allow_html=True)
+        st.markdown("<p style='margin-top: 10px; color:#2E8B57; font-size: 18px; font-weight: bold;'>Share your insight, innovative idea on the footware item you are using and stand a chance to win a Rs. 5,000 gift voucher each month...</p>", unsafe_allow_html=True)
 
     # AI Chatbot Feedback Collector Section
     st.markdown("---")
