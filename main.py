@@ -1115,10 +1115,10 @@ elif selected == "Management vs NLP model":
 # PAGE 5: STATISTICAL ANALYSIS (Owner Only)
 # =========================================================
 elif selected == "Statistical Analysis-Crowd ideas":
-    st.title("Statistical Analysis- Customer Perception")
+    st.title("Statistical Analysis- Crowd Perception")
     st.markdown("ANOVA test to identify which features need more attention based on 'Need Improvement' predictions.")
-    st.markdown("**Null Hypothesis (H₀):** Customer dissatisfaction is equal across all the three features.")
-    st.markdown("**Alternative Hypothesis (H₁):** Customer dissatisfaction is not equal across the three features.")
+    st.markdown("**Null Hypothesis (H₀):** Customer dissatisfaction is equal across all the three features.(All features should be improved.)")
+    st.markdown("**Alternative Hypothesis (H₁):** Customer dissatisfaction is not equal across the three features.(Some features should be improved)")
 
     # Get all feedback data from database
     with get_db_connection() as conn:
