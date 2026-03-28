@@ -1034,9 +1034,9 @@ elif selected == "Management vs NLP model":
                     else:
                         st.metric("P-value", f"{nlp_p_value:.6f}")
                         if nlp_p_value < 0.05:
-                            st.success("Significant difference between features")
+                            st.success("Significant difference between the need improvement rate of the features.Consider Tukey's HSD result to prioritize the feature improvement decision")
                         else:
-                            st.info("No significant difference between features")
+                            st.info("No significant difference between the need improvement rate of the features.")
                 except Exception as e:
                     st.error(f"Unable to calculate p-value: {e}")
             else:
