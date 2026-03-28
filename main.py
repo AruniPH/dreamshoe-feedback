@@ -896,8 +896,8 @@ elif selected == "Statistical analysis- Management Decisions":
     
     st.markdown("---")
     st.markdown("ANOVA test to identify which features need more attention based on management decisions.")
-    st.markdown("**Null Hypothesis (H₀):** Customer dissatisfaction is equal across all the three features.")
-    st.markdown("**Alternative Hypothesis (H₁):** Customer dissatisfaction is not equal across the three features.")
+    st.markdown("**Null Hypothesis (H₀):** Need improvement rate is equal across all the three features.")
+    st.markdown("**Alternative Hypothesis (H₁):** Need improvement rate is not equal across all the three features.")
     
     # Get all management decisions data
     with get_db_connection() as conn:
@@ -938,7 +938,7 @@ elif selected == "Statistical analysis- Management Decisions":
                 })
                 st.dataframe(anova_results)
                 st.markdown("* If p < 0.05: Reject the null hypothesis (H₀).")
-                st.markdown("* If p ≥ 0.05: Fail to reject the null hypothesis (H₀).")
+                st.markdown("* If p ≥ 0.05: Fail to reject the null hypothesis (H1).")
                 
                 # If significant, perform Tukey HSD post-hoc test
                 if p_value < 0.05:
@@ -1074,9 +1074,9 @@ elif selected == "Management vs NLP model":
                     else:
                         st.metric("P-value", f"{mgmt_p_value:.6f}")
                         if mgmt_p_value < 0.05:
-                            st.success("Significant difference between features")
+                            st.success("Significant difference between need improvement rate of the features. Consider Tueky's HSD result to priotize the features for improvement")
                         else:
-                            st.info("No significant difference between features")
+                            st.info("No significant difference between the need improvement rate of the features. Improve all the featres.")
                 except Exception as e:
                     st.error(f"Unable to calculate p-value: {e}")
             else:
