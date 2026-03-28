@@ -1117,8 +1117,8 @@ elif selected == "Management vs NLP model":
 elif selected == "Statistical Analysis-Crowd ideas":
     st.title("Statistical Analysis- Crowd Perception")
     st.markdown("ANOVA test to identify which features need more attention based on 'Need Improvement' predictions.")
-    st.markdown("**Null Hypothesis (H₀):** Customer dissatisfaction is equal across all the three features.(All features should be improved.)")
-    st.markdown("**Alternative Hypothesis (H₁):** Customer dissatisfaction is not equal across the three features.(Some features should be improved)")
+    st.markdown("**Null Hypothesis (H₀):** Need improvement rate is equal across all the three features.")
+    st.markdown("**Alternative Hypothesis (H₁):** Need improvement rate is not equal across the three features.")
 
     # Get all feedback data from database
     with get_db_connection() as conn:
@@ -1173,8 +1173,8 @@ elif selected == "Statistical Analysis-Crowd ideas":
                         'Value': [f"{f_stat:.6f}", f"{p_value:.6f}"]
                     })
                     st.dataframe(anova_results)
-                    st.markdown("* If p < 0.05: Reject the null hypothesis (H₀).")
-                    st.markdown("* If p ≥ 0.05: Fail to reject the null hypothesis (H₀).")
+                    st.markdown("* If p < 0.05: Reject the null hypothesis (H₀)- Only some features should be improved. Consider Tukey's HSD result to prioritize the features for improvement.")
+                    st.markdown("* If p ≥ 0.05: Fail to reject the null hypothesis (H₀)- All features should be improved.")
 
                     # If significant, perform Tukey HSD post-hoc test
                     if p_value < 0.05:
@@ -1182,19 +1182,19 @@ elif selected == "Statistical Analysis-Crowd ideas":
                         tukey = pairwise_tukeyhsd(endog=feedback_df['urgency_score'], groups=feedback_df['feature'], alpha=0.05)
                         tukey_df = pd.DataFrame(data=tukey.summary().data[1:], columns=tukey.summary().data[0])
                         st.dataframe(tukey_df)
-                        st.markdown("* p-adj < 0.05 → Statistically significant difference.")
-                        st.markdown("* p-adj ≥ 0.05 → No statistically significant difference.")
+                        st.markdown("* p-adj < 0.05 → Statistically significant difference of the improvement rates of the features.")
+                        st.markdown("* p-adj ≥ 0.05 → No statistically significant difference of the improvement rates of the features.")
 
                         # Feature comparison interpretation
                         st.subheader("Analysis Interpretation")
                         mean_improvement = feedback_df.groupby('feature')['urgency_score'].mean().sort_values(ascending=False)
                         highest_feature = mean_improvement.index[0]
                         lowest_feature = mean_improvement.index[-1]
-                        st.warning(f"**{highest_feature}** needs the most attention (highest improvement rate: {mean_improvement.iloc[0]:.3f})")
+                        st.warning(f"**{highest_feature}** needs the most attention (highest need improvement rate: {mean_improvement.iloc[0]:.3f})")
                         st.success(f"**{lowest_feature}** is performing best (lowest improvement rate: {mean_improvement.iloc[-1]:.3f})")
                     else:
                         st.info("No significant differences found between features. Post-hoc test not needed.")
-                        st.info("All features are performing equally well - no significant differences detected.")
+                        st.info("All features should be improved - no significant differences of need improvement detected.")
 
                 with col2:
                     if p_value < 0.05:
