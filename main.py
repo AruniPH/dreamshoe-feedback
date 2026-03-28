@@ -1101,11 +1101,11 @@ elif selected == "Management vs NLP model":
             
             # Interpretation
             if nlp_p_value < 0.05 and mgmt_p_value < 0.05:
-                st.success("Both analyses show significant differences - Strong agreement")
+                st.success("Both analyses show significant differences - Strong agreement - Consider Tukey's HSD to prioritize features for improvement")
             elif nlp_p_value >= 0.05 and mgmt_p_value >= 0.05:
-                st.info("Both analyses show no significant differences - Agreement")
+                st.info("Both analyses show no significant differences - Strong Agreement - Focus on all fetures' improvement decision")
             else:
-                st.warning("Analyses disagree - Consider reviewing the data or methodology")
+                st.warning("Analyses disagree - Consider reviewing the data and management decisions")
         else:
             st.info("Complete both analyses to see comparison")
     except:
