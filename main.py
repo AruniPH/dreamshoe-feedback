@@ -968,7 +968,7 @@ elif selected == "Statistical analysis- Management Decisions":
                     st.pyplot(fig)
             
             # Feature comparison summary
-            st.write("### Mean 'Need Improvement' Rate per Feature")
+            st.write("### 'Need Improvement' Rate per Feature")
             
             col1, col2 = st.columns(2)
             
