@@ -937,8 +937,8 @@ elif selected == "Statistical analysis- Management Decisions":
                     'Value': [f"{f_stat:.6f}", f"{p_value:.6f}"]
                 })
                 st.dataframe(anova_results)
-                st.markdown("* If p < 0.05: Reject the null hypothesis (H₀).")
-                st.markdown("* If p ≥ 0.05: Fail to reject the null hypothesis (H1).")
+                st.markdown("* p < 0.05 → Differences are statistically significant → prioritize features (use Tukey's HSD).")
+                st.markdown("* p ≥ 0.05 → No clear difference → treat features the same.")
                 
                 # If significant, perform Tukey HSD post-hoc test
                 if p_value < 0.05:
