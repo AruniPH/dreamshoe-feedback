@@ -221,7 +221,7 @@ if selected == "Customer Hub":
                     # Save feedback to database
                     try:
                         combined_text = f"{feature} {current_subfeature} {user_input}"
-                        X_vec = vectorizer.transform([combined_text])
+                        X_vec = vectorizer.transform([combined_text]) #TF-IDF
                         prediction = clf.predict(X_vec)[0]
                         prediction_label = "Need Improvement" if prediction == 1 else "No Need Improvement"
                         customer_name = st.session_state.get('customer_name', '')
@@ -896,8 +896,8 @@ elif selected == "Statistical analysis- Management Decisions":
     
     st.markdown("---")
     st.markdown("ANOVA test to identify which features need more attention based on management decisions.")
-    st.markdown("**Null Hypothesis (H₀):** Need improvement rate is equal across all the three features.")
-    st.markdown("**Alternative Hypothesis (H₁):** Need improvement rate is not equal across all the three features.")
+    st.markdown("**Null Hypothesis (H₀):** Mean Need improvement of all feature groups are equal")
+    st.markdown("**Alternative Hypothesis (H₁):** At least one feature group mean Need Improvement is different.")
     
     # Get all management decisions data
     with get_db_connection() as conn:
@@ -1117,8 +1117,8 @@ elif selected == "Management vs NLP model":
 elif selected == "Statistical Analysis-Crowd ideas":
     st.title("Statistical Analysis- Crowd Perception")
     st.markdown("ANOVA test to identify which features need more attention based on 'Need Improvement' predictions.")
-    st.markdown("**Null Hypothesis (H₀):** Need improvement rate is equal across all the three features.")
-    st.markdown("**Alternative Hypothesis (H₁):** Need improvement rate is not equal across the three features.")
+    st.markdown("**Null Hypothesis (H₀):** Mean Need improvement of all feature groups are equal")
+    st.markdown("**Alternative Hypothesis (H₁):** At least one feature group mean Need Improvement is different.")
 
     # Get all feedback data from database
     with get_db_connection() as conn:
