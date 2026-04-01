@@ -321,14 +321,13 @@ if selected == "Customer Hub":
                 st.markdown("**Feature Requirements**")
                 st.bar_chart(feature_percentages, use_container_width=True)
 
+            with chart_col2:
+                st.markdown("**Sub-Feature Requirements**")
                 selected_feature_hub = st.selectbox(
                     "Click a feature to filter sub-features:",
                     list(feature_subfeature_map.keys()),
                     key="selected_feature_hub"
                 )
-
-            with chart_col2:
-                st.markdown("**Sub-Feature Requirements**")
 
                 filtered_subfeatures = feature_subfeature_map[selected_feature_hub]
                 subfeature_data = []
@@ -775,14 +774,13 @@ elif selected == "Owner Dashboard":
             st.markdown("**Feature Requirements**")
             st.bar_chart(feature_percentages, use_container_width=True)
 
+        with chart_col2:
+            st.markdown("**Sub-Feature Requirements**")
             selected_feature_owner = st.selectbox(
                 "Click a feature to filter sub-features:",
                 list(feature_subfeature_map.keys()),
                 key="selected_feature_owner"
             )
-
-        with chart_col2:
-            st.markdown("**Sub-Feature Requirements**")
 
             filtered_subfeatures = feature_subfeature_map[selected_feature_owner]
             subfeature_data = []
