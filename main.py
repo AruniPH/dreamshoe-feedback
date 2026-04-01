@@ -304,6 +304,12 @@ if selected == "Customer Hub":
             # Charts side by side
             chart_col1, chart_col2 = st.columns(2)
             
+            feature_subfeature_map = {
+                "Comfort & Fit": ["Cushioning & Support", "Breathability", "Sizing Accuracy"],
+                "Durability & Quality": ["Material Strength", "Sole & Stitching", "Longevity"],
+                "Design & Style": ["Aesthetics", "Versatility", "Brand Identity"],
+            }
+
             with chart_col1:
                 # Feature chart
                 feature_counts = df.groupby(['Feature', 'Urgency']).size().unstack(fill_value=0)
@@ -311,22 +317,22 @@ if selected == "Customer Hub":
                     if col not in feature_counts.columns:
                         feature_counts[col] = 0
                 feature_percentages = feature_counts.div(feature_counts.sum(axis=1), axis=0) * 100
-                
+
                 st.markdown("**Feature Requirements**")
                 st.bar_chart(feature_percentages, use_container_width=True)
-            
+
+                selected_feature_hub = st.selectbox(
+                    "Click a feature to filter sub-features:",
+                    list(feature_subfeature_map.keys()),
+                    key="selected_feature_hub"
+                )
+
             with chart_col2:
-                # All 9 Sub-features chart
                 st.markdown("**Sub-Feature Requirements**")
-                
-                all_subfeatures = [
-                    "Cushioning & Support", "Breathability", "Sizing Accuracy",
-                    "Material Strength", "Sole & Stitching", "Longevity", 
-                    "Aesthetics", "Versatility", "Brand Identity"
-                ]
-                
+
+                filtered_subfeatures = feature_subfeature_map[selected_feature_hub]
                 subfeature_data = []
-                for subf in all_subfeatures:
+                for subf in filtered_subfeatures:
                     subf_data = df[df['SubFeature'] == subf]
                     if not subf_data.empty:
                         need_improvement = (subf_data['Urgency'] == 'Need Improvement').sum()
@@ -336,15 +342,13 @@ if selected == "Customer Hub":
                     else:
                         need_pct = 0
                         no_need_pct = 0
-                    
                     subfeature_data.append({
                         'SubFeature': subf,
                         'Need Improvement': need_pct,
                         'No Need Improvement': no_need_pct
                     })
-                
-                subf_df = pd.DataFrame(subfeature_data)
-                subf_df.set_index('SubFeature', inplace=True)
+
+                subf_df = pd.DataFrame(subfeature_data).set_index('SubFeature')
                 st.bar_chart(subf_df, use_container_width=True)
         
         with col_form:
@@ -752,31 +756,37 @@ elif selected == "Owner Dashboard":
 
         st.subheader("Feature & Sub-Feature Improvement Requirements")
 
+        feature_subfeature_map = {
+            "Comfort & Fit": ["Cushioning & Support", "Breathability", "Sizing Accuracy"],
+            "Durability & Quality": ["Material Strength", "Sole & Stitching", "Longevity"],
+            "Design & Style": ["Aesthetics", "Versatility", "Brand Identity"],
+        }
+
         # Charts side by side
         chart_col1, chart_col2 = st.columns(2)
-        
+
         with chart_col1:
             feature_counts = df.groupby(['Feature', 'Urgency']).size().unstack(fill_value=0)
             for col in ["Need Improvement", "No Need Improvement"]:
                 if col not in feature_counts.columns:
                     feature_counts[col] = 0
             feature_percentages = feature_counts.div(feature_counts.sum(axis=1), axis=0) * 100
-            
+
             st.markdown("**Feature Requirements**")
             st.bar_chart(feature_percentages, use_container_width=True)
-        
+
+            selected_feature_owner = st.selectbox(
+                "Click a feature to filter sub-features:",
+                list(feature_subfeature_map.keys()),
+                key="selected_feature_owner"
+            )
+
         with chart_col2:
             st.markdown("**Sub-Feature Requirements**")
-            
-            # All 9 Sub-features chart
-            all_subfeatures = [
-                "Cushioning & Support", "Breathability", "Sizing Accuracy",
-                "Material Strength", "Sole & Stitching", "Longevity", 
-                "Aesthetics", "Versatility", "Brand Identity"
-            ]
-            
+
+            filtered_subfeatures = feature_subfeature_map[selected_feature_owner]
             subfeature_data = []
-            for subf in all_subfeatures:
+            for subf in filtered_subfeatures:
                 subf_data = df[df['SubFeature'] == subf]
                 if not subf_data.empty:
                     need_improvement = (subf_data['Urgency'] == 'Need Improvement').sum()
@@ -786,15 +796,13 @@ elif selected == "Owner Dashboard":
                 else:
                     need_pct = 0
                     no_need_pct = 0
-                
                 subfeature_data.append({
                     'SubFeature': subf,
                     'Need Improvement': need_pct,
                     'No Need Improvement': no_need_pct
                 })
-            
-            subf_df = pd.DataFrame(subfeature_data)
-            subf_df.set_index('SubFeature', inplace=True)
+
+            subf_df = pd.DataFrame(subfeature_data).set_index('SubFeature')
             st.bar_chart(subf_df, use_container_width=True)
     else:
         st.info("No feedback data available yet.")
